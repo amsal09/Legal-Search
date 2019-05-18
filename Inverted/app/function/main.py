@@ -211,5 +211,6 @@ def main_function(query):
     weight = countWTD(N,all_document,join_word,ngram_doc)
     hasil = []
     hasil.append(sorted(weight[0], key = lambda x : x['score'], reverse = True))
-
-    return hasil
+    top_result = hasil[0][:10]
+    length = len(top_result)
+    return hasil, length

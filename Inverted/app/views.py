@@ -10,7 +10,7 @@ def index(request):
 def result(request):
     if request.method == 'POST':
         text = request.POST['querysearch']
-        result = main.main_function(text)
+        result, N = main.main_function(text)
 
     # frame = pd.DataFrame(list(score), columns=['DOC NO', 'FILENAME', 'SCORE TFIDF'])
 
@@ -18,6 +18,7 @@ def result(request):
 
         content = {
             'result': result,
+            'N': N,
             'query' : text
         }
 
