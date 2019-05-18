@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Legal Search - Inverted Index</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/animate.css">
+    
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/aos.css">
+
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/flaticon.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/icomoon.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/style.css">
+  </head>
+  <body>
+    
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">Legal Search</a>
+	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	            <span class="oi oi-menu"></span> Menu
+	        </button>
+	    </div>
+	</nav>
+    <!-- END nav -->
+
+    <section class="ftco-section bg-warning">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <form action="/result/" class="subscribe-form" method="post">
+                        {% csrf_token %}
+                        <div class="form-group d-flex">
+                            <input type="text" name="querysearch" class="form-control" placeholder="Find Any Information" value="{{query}}">
+                            <input type="submit" value="Search" class="submit px-3">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                {% if result is not none %}
+                    {% for i in result %}
+                        {% for j in i %}
+                        <div class="col-md-12 ftco-animate">
+                            <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">             
+                                <div class="mb-4 mb-md-0 mr-5">
+                                    <div class="job-post-item-header d-flex align-items-center">
+                                        <h2 class="mr-3 text-black h3">{{j.title}}</h2>
+                                    </div>
+                                    <div class="job-post-item-body d-block d-md-flex">
+                                        <div class="mr-3"><span class="icon-layers"></span> <a href="#">Doc No: {{j.docno}}.</a></div>
+                                        <div><span class="icon-score"></span> <span>Score: {{j.score}}</span></div>
+                                    </div>
+                                </div>
+                        
+                                <div class="ml-auto d-flex">
+                                    <a href="{{j.path}}" class="btn btn-primary py-2 mr-1">Download File</a>
+                                </div>
+                            </div>
+                        </div><!-- end -->
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                <div class="col-md-12 ftco-animate">
+                    <h1 style="color:floralwhite">No Document Relevant with Query!!!</h1>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="../../static/new-bootstrap/js/jquery.min.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../../static/new-bootstrap/js/popper.min.js"></script>
+  <script src="../../static/new-bootstrap/js/bootstrap.min.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.easing.1.3.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.waypoints.min.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.stellar.min.js"></script>
+  <script src="../../static/new-bootstrap/js/owl.carousel.min.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.magnific-popup.min.js"></script>
+  <script src="../../static/new-bootstrap/js/aos.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.animateNumber.min.js"></script>
+  <script src="../../static/new-bootstrap/js/bootstrap-datepicker.js"></script>
+  <script src="../../static/new-bootstrap/js/jquery.timepicker.min.js"></script>
+  <script src="../../static/new-bootstrap/js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="../../static/new-bootstrap/js/google-map.js"></script>
+  <script src="../../static/new-bootstrap/js/main.js"></script>
+    
+  </body>
+</html>
