@@ -1,126 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Colorlib">
-    <meta name="description" content="#">
-    <meta name="keywords" content="#">
-    <!-- Page Title -->
-    <title>Legal Search - Inverted Index</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../../static/css/bootstrap.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet">
-    <!-- Simple line Icon -->
-    <link rel="stylesheet" href="../../static/css/simple-line-icons.css">
-    <!-- Themify Icon -->
-    <link rel="stylesheet" href="../../static/css/themify-icons.css">
-    <!-- Hover Effects -->
-    <link rel="stylesheet" href="../../static/css/set1.css">
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/bootstrap.min.css">
+    <script src="../../static/new-bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/new-bootstrap/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<title>Legal Search</title>
+	<link rel="stylesheet"  href="../../static/style.css">
 </head>
-
 <body>
-    <!--============================= HEADER =============================-->
-    <div class="nav-menu">
-        <div class="bg transition">
-            <div class="container-fluid fixed">
-                <div class="row">
-                    <div class="col-md-12">
-                        <nav class="navbar navbar-expand-lg navbar-light">
-                            <a class="navbar-brand" href="/">Legal Search</a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="icon-menu"></span>
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="preloader"></div>
+
+    <div class="logo_depan">
+        <img src="../../static/images/logo.PNG" alt="" height="180">
     </div>
-    <!-- SLIDER -->
-    <section class="slider d-flex align-items-center">
-        <!-- <img src="images/slider.jpg" class="img-fluid" alt="#"> -->
-        <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="col-md-12">
-                    <div class="slider-title_box">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="slider-content_wrap">
-                                    <h1>Find Any Legal Information Here!</h1>
-                                    <h5>Hope you can get best information from this website</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-md-10">
-                                <form class="form-wrap mt-4" action="/result/" method="post">
-                                    {% csrf_token %}
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <input type="text" placeholder="What are your looking for?" name="querysearch" class="btn-group">
-                                        <button type="submit" class="btn-form"><span class="icon-magnifier search-icon"></span>SEARCH<i class="pe-7s-angle-right"></i></button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <form action="/result/" method="post">
+    {% csrf_token %}
+        <div class="search-box">
+            <input type="text" class="search-txt" placeholder="Search..." name="querysearch">
+            <a class="search-btn">
+                <i class="fas fa-search"></i>
+            </a>
         </div>
-    </section>
-    <!--// SLIDER -->
-    <!--//END HEADER -->
-    <!--============================= FOOTER =============================-->
-    <footer class="main-block dark-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="copyright">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright &copy; <script>document.write(new Date().getFullYear());</script><i class="ti-heart" aria-hidden="true"></i></p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <ul>
-                            <li><a href="#"><span class="ti-facebook"></span></a></li>
-                            <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
-                            <li><a href="#"><span class="ti-instagram"></span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!--//END FOOTER -->
-
-
-
-
-    <!-- jQuery, Bootstrap JS. -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="../../static/js/jquery-3.2.1.min.js"></script>
-    <script src="../../static/js/popper.min.js"></script>
-    <script src="../../static/js/bootstrap.min.js"></script>
-
-    <script>
-        $(window).scroll(function() {
-            // 100 = The point you would like to fade the nav in.
-
-            if ($(window).scrollTop() > 100) {
-
-                $('.fixed').addClass('is-sticky');
-
-            } else {
-
-                $('.fixed').removeClass('is-sticky');
-
-            };
-        });
-    </script>
+    </form>
 </body>
-
+<script>
+        window.onload = function() 
+        {
+            //display loader on page load 
+            $('#preloader').fadeOut();
+        } 
+    </script>
 </html>
+

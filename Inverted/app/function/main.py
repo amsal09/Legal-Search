@@ -11,6 +11,8 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from sklearn.feature_extraction.text import CountVectorizer
 import nltk
+from gensim.summarization.summarizer import summarize
+import time
 
 def get_content_file(directory):
     extensions = ['pdf','docx','txt']
@@ -62,7 +64,7 @@ def preprocessing(document):
             
     return tokens
 
-all_document = get_content_file('D:/Kuliah/Semester 8/INRE/Proyek/example')
+all_document = get_content_file('D:/Kuliah/Semester 8/INRE/Proyek/GUI/Inverted/Legal-Search/Inverted/app/collections/example/')
 N = len(all_document)
 
 tokens = []
@@ -86,14 +88,17 @@ def preprosQuery(query):
     queri=[]
     spl = query.split()
     for i in range(len(spl)):
-        if not spl[i].isdigit():
-            queri.append(spl[i])
+        kata = ''.join([ch for ch in spl[i] if not ch.isdigit()])
+        queri.append(kata)
             
+    # print(queri)
     # define punctuation  
-    punc = string.punctuation
-
-    # remove punctuation from the string  
-    no_punc =  [token.strip(punc) for token in queri]
+    no_punc = []
+    # remove punctuation from the string
+    for i in range(len(queri)):
+        punc = set(string.punctuation)
+        word = ''.join([i for i in queri[i] if i not in punc])
+        no_punc.append(word)
     # display the unpunctuated string  
 
     lower=[]
@@ -114,7 +119,7 @@ def preprosQuery(query):
     join_word = ' '.join([w for w in stem])
     n = len(stem)
 
-    return join_word,n
+    return join_word,n, stem
 
 # join_word, n = preprosQuery(query)
 
@@ -139,23 +144,24 @@ def generate_ngrams(data, n):
 # ngram, ngram_doc = generate_ngrams(tokens, n)
 
 
-def countDF(N,ngram,query):
+def countDF(N,tokens,query):
     df = []
-
-    for i in range(N):
-        count = 0
-        for j in range(len(ngram[i])):
-            if query == ngram[i][j]:
-                count+=1
-        df.append(count)
+    for word in query:
+        sums=0
+        for i in range(N):
+#             print(word)
+            if word in tokens[i]:
+                sums+=1
+        df.append(sums)
         
     return df
 
-def countIDF(N,document,query):
+def countIDF(N,tokens,query):
     # idf
-    df = countDF(N,document,query)
+    df = countDF(N,tokens,query)
+#     print(df)
     idf = []
-    for i in range(N):
+    for i in range(len(df)):
         try:
             idf.append(math.log10(N/df[i]))
         except ZeroDivisionError:
@@ -163,41 +169,75 @@ def countIDF(N,document,query):
             
     return idf
 
-def countWTD(N,document,query,ngram):
+def countWTD(N,tokens,query):
     #w(t, d)
     #t = term
     #d = document
     hasil = []
-    l = []
-    # weight=[]
-    idf = countIDF(N,ngram,query)
-    for i in range(N):
-        wtd = {}
-        tf = ngram[i].count(query) # menghitung nilai tf
-        if tf != 0:
-            score = math.log10(tf) #log10(tf(t,d))
-            score+=1 # 1 + log(tf(t,d))
-            score*=idf[i] #tf * idf
-            
-            idx = document[i][0]
-            title = document[i][1] # filename
-            path = document[i][3]
+    idf = countIDF(N,tokens,query)
+    for i in range(len(query)):
+        l = []
+        for j in range(N):
+            wtd =  {}
+            tf = tokens[j].count(query[i]) # menghitung nilai tf
+            if tf != 0:
+                score = math.log10(tf) #log10(tf(t,d))
+                score+=1 # 1 + log(tf(t,d))
+                score*=idf[i] #tf * idf
 
-            # weight.append((idx,title,path,score))
-            # dic[idx] = score
-            wtd['docno'] = idx
-            wtd['title'] = title
-            wtd['path'] = path
-            wtd['score'] = score # [i+1] = defenisi nomor dokumen; score = wtd
+                wtd[j+1] = score
+
+                l.append(wtd)
+            else:
+                wtd[j+1] = 0
+                l.append(wtd)
             
-            l.append(wtd)
-            
-    hasil.append(l)
+        hasil.append(l)
+        
     return hasil
+
+def scoreTFIDF(weight, N, query):
+    result = []
+    for i in range(len(query)):
+        l = []
+        for j in range(N):
+            dic = {}
+            for kata in query[i]:
+                sums = 0
+                index = query.index(query[i])
+#                 print(index)
+                for val in weight[index][j].values():
+                    sums+=val
+            
+            if(sums!=0):
+                idx = all_document[j][0]
+                title = all_document[j][1] # filename
+                path = all_document[j][3]
+                text = summarize(all_document[j][2])
+                dic['docno'] = idx
+                dic['title'] = title
+                dic['path'] = path
+                dic['score'] = sums
+                dic['text'] = text[0:400]
+                # print(dic)
+            if(len(dic) != 0): l.append(dic)
+        
+        result.append(l)
+        
+    return result
+
 
 
 def main_function(query):
-    join_word, n = preprosQuery(query)
+    start = time.time()
+    join_word, n, stem = preprosQuery(query)
+    unikQuery = []
+    
+
+    for i in range(len(stem)):
+        if stem[i] not in unikQuery:
+            unikQuery.append(stem[i])
+
     ngram, ngram_doc = generate_ngrams(tokens, n)
     # indexing ngram
     n_gram_index = {}
@@ -208,9 +248,16 @@ def main_function(query):
                 doc_no.append(all_document[i][0])
         n_gram_index[ngram_token] = doc_no
 
-    weight = countWTD(N,all_document,join_word,ngram_doc)
-    hasil = []
-    hasil.append(sorted(weight[0], key = lambda x : x['score'], reverse = True))
-    top_result = hasil[0][:10]
+    weight = countWTD(N,tokens,unikQuery)
+    # print(weight)
+    scoreWTD = scoreTFIDF(weight, N, unikQuery)
+
+    print(scoreWTD)
+    sort = []
+    sort.append(sorted(scoreWTD[0], key = lambda x : x['score'], reverse = True))
+
+    top_result = sort[0][:10]
     length = len(top_result)
-    return hasil, length
+    end = time.time()
+    execute_time = math.ceil(end - start)
+    return top_result, length, execute_time

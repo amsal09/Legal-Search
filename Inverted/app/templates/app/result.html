@@ -1,124 +1,115 @@
-<!DOCTYPE html>
+<html>
 <html lang="en">
-  <head>
-    <title>Legal Search - Inverted Index</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <link rel="stylesheet" href="../../static/new-bootstrap/css/bootstrap.min.css">
+    <script src="../../static/new-bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/new-bootstrap/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<title>Laws Search</title>
+    <link rel="stylesheet"  href="../../static/result.css">
+</head>
     
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
+    <body>
+        <div id="preloader"></div>
+        <!-- Nav Menu Starts -->
+        
+         <nav class="navbar navbar-expand-sm   navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/animate.css">
-    
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/magnific-popup.css">
-
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/aos.css">
-
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/ionicons.min.css">
-
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/jquery.timepicker.css">
-
-    
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/flaticon.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/icomoon.css">
-    <link rel="stylesheet" href="../../static/new-bootstrap/css/style.css">
-  </head>
-  <body>
-    
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container">
-            <a class="navbar-brand" href="/">Legal Search</a>
-	        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	            <span class="oi oi-menu"></span> Menu
-	        </button>
-	    </div>
-	</nav>
-    <!-- END nav -->
-
-    <section class="ftco-section bg-warning">
-        <div class="container">
-            <div class="row justify-content-center mb-5 pb-3">
-                <div class="col-md-12 heading-section text-center ftco-animate">
-                    <form action="/result/" class="subscribe-form" method="post">
-                        {% csrf_token %}
-                        <div class="form-group d-flex">
-                            <input type="text" name="querysearch" class="form-control" placeholder="Find Any Information" value="{{query}}">
-                            <input type="submit" value="Search" class="submit px-3">
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                {% if result.0 %}
-                    {% for i in result %}
-                        {% for j in i %}
-                        
-                        <div class="col-md-12 ftco-animate">
-                            <div class="job-post-item bg-white p-4 d-block d-md-flex align-items-center">             
-                                <div class="mb-4 mb-md-0 mr-5">
-                                    <div class="job-post-item-header d-flex align-items-center">
-                                        <h2 class="mr-3 text-black h3">{{j.title}}</h2>
-                                    </div>
-                                    <div class="job-post-item-body d-block d-md-flex">
-                                        <div class="mr-3"><span class="icon-layers"></span> <a href="#">Doc No: {{j.docno}}.</a></div>
-                                        <div><span class="icon-score"></span> <span>Score: {{j.score}}</span></div>
-                                    </div>
-                                </div>
-                        
-                                <div class="ml-auto d-flex">
-                                    <a href="{{j.path}}" class="btn btn-primary py-2 mr-1">Download File</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <a href="/" style="margin-left: 100px"><img src="../../static/images/logo2.PNG" height="60" alt=""></a>
+            <li style="margin-left: 253%; " >
+                <a class="nav-link" href="#offer"><b style="color: darkcyan; font-size: 18px">Simulation</b></a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+        
+        <!-- Nav Menu Ends -->
+        
+        
+    <div class="container bootstrap snippet">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <h2>
+                        {{N}} results found for: <span class="text-navy">"{{query}}"</span>
+                    </h2>
+                    <small>Request time  ({{time}} seconds)</small>
+        
+                    <div class="search-form">
+                        <form action="/result/" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" value="{{query}}" name="querysearch" class="form-control input-lg">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="submit">Search
+                                    </button>
                                 </div>
                             </div>
-                        </div><!-- end -->
+                        </form>
+                    </div>
+                    {% if result.0 %}
+                        {% for i in result %}
+                            <div class="hr-line-dashed"></div>
+                            <div class="search-result">
+                                <h3><a href="{{i.path}}">{{i.title}}</a></h3>
+                                <!-- <a href="{{i.path}}" class="search-link">Download Document</a> -->
+                                <h6 style="color:darkcyan">
+                                    Score: {{i.score}}
+                                </h6>
+                                <p>{{i.text}}...</p>
+                            </div>
+
                         {% endfor %}
-                    {% endfor %}
-                {% else %}
-                <div class="col-md-12 ftco-animate">
-                    <h1 style="color:floralwhite">No Document Relevant with Query : "{{query}}"!!!</h1>
+                    {% else %}
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-lg-12">
+                            <center><img src="../../static/images/noresult.png" alt=""></center>
+                        </div>                            
+                    {% endif %}
+                    <div class="hr-line-dashed"></div>
+                    <!-- <div class="text-center">
+                        <div class="btn-group">
+                            <button class="btn btn-white" type="button"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                            <button class="btn btn-white">1</button>
+                            <button class="btn btn-white ">2</button>
+                            <button class="btn btn-white">3</button>
+                            <button class="btn btn-white">4</button>
+                            <button class="btn btn-white">5</button>
+                            <button class="btn btn-white">6</button>
+                            <button class="btn btn-white">7</button>
+                            <button class="btn btn-white" type="button"><i class="glyphicon glyphicon-chevron-right"></i> </button>
+                        </div>
+                    </div> -->
                 </div>
-                {% endif %}
             </div>
         </div>
-    </section>
-
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-            </p>
-          </div>
+    </div>
+</div>
+    
+        
+        <!-- Nav Footer Starts -->
+        
+        <footer class="section footer-classic context-dark bg-image" style="background: #2d3246; position: relative; width: 100%; bottom: 0">
+        <div class="row no-gutters social-container">
+          <div class="col"><a class="social-inner" href="#"><span class="icon mdi mdi-facebook"></span><span>Develop by Kelompok INRE 02</span></a></div>
         </div>
-      </div>
-    </footer>
+      </footer>
+        
+        <!-- Nav Footer Ends -->   
+        
+    </body>
+    <script>
+            window.onload = function() 
+            {
+                //display loader on page load 
+                $('#preloader').fadeOut();
+            } 
+        </script> 
     
-  
-
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-
-  <script src="../../static/new-bootstrap/js/jquery.min.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="../../static/new-bootstrap/js/popper.min.js"></script>
-  <script src="../../static/new-bootstrap/js/bootstrap.min.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.easing.1.3.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.waypoints.min.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.stellar.min.js"></script>
-  <script src="../../static/new-bootstrap/js/owl.carousel.min.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.magnific-popup.min.js"></script>
-  <script src="../../static/new-bootstrap/js/aos.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.animateNumber.min.js"></script>
-  <script src="../../static/new-bootstrap/js/bootstrap-datepicker.js"></script>
-  <script src="../../static/new-bootstrap/js/jquery.timepicker.min.js"></script>
-  <script src="../../static/new-bootstrap/js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="../../static/new-bootstrap/js/google-map.js"></script>
-  <script src="../../static/new-bootstrap/js/main.js"></script>
-    
-  </body>
 </html>
